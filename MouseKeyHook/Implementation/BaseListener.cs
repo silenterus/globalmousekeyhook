@@ -7,7 +7,7 @@ using Gma.System.MouseKeyHook.WinApi;
 
 namespace Gma.System.MouseKeyHook.Implementation
 {
-    internal abstract class BaseListener : IDisposable
+    abstract internal class BaseListener : IDisposable
     {
         protected BaseListener(Subscribe subscribe)
         {
@@ -21,6 +21,6 @@ namespace Gma.System.MouseKeyHook.Implementation
             Handle.Dispose();
         }
 
-        protected abstract bool Callback(CallbackData data);
+        abstract protected bool Callback(CallbackData data);
     }
 }

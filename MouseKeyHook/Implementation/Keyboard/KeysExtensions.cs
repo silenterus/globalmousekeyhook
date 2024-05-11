@@ -3,10 +3,9 @@
 // See license.txt or https://mit-license.org/
 
 using System.Windows.Forms;
-
-namespace Gma.System.MouseKeyHook.Implementation
+namespace Gma.System.MouseKeyHook.Implementation.Keyboard
 {
-    internal static class KeysExtensions
+    static internal class KeysExtensions
     {
         public static Keys Normalize(this Keys key)
         {

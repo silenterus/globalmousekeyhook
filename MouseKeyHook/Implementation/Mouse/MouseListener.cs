@@ -6,77 +6,76 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Gma.System.MouseKeyHook.WinApi;
-
-namespace Gma.System.MouseKeyHook.Implementation
+namespace Gma.System.MouseKeyHook.Implementation.Mouse
 {
     // Because it is a P/Invoke method, 'GetSystemMetrics(int)'
     // should be defined in a class named NativeMethods, SafeNativeMethods,
     // or UnsafeNativeMethods.
     // https://msdn.microsoft.com/en-us/library/windows/desktop/ms724385(v=vs.85).aspx
-    internal static class NativeMethods
+    static internal class NativeMethods
     {
-        private const int SM_SWAPBUTTON = 23;
-        private const int SM_CXDRAG = 68;
-        private const int SM_CYDRAG = 69;
-        private const int SM_CXDOUBLECLK = 36;
-        private const int SM_CYDOUBLECLK = 37;
+        private const int WM_SM_SWAPBUTTON = 23;
+        private const int WM_SM_CXDRAG = 68;
+        private const int WM_SM_CYDRAG = 69;
+        private const int WM_SM_CXDOUBLECLK = 36;
+        private const int WM_SM_CYDOUBLECLK = 37;
 
         [DllImport("user32.dll")]
         private static extern int GetSystemMetrics(int index);
 
         public static int GetSwapButtonThreshold()
         {
-            return GetSystemMetrics(SM_SWAPBUTTON);
+            return GetSystemMetrics(WM_SM_SWAPBUTTON);
         }
 
         public static int GetXDragThreshold()
         {
-            return GetSystemMetrics(SM_CXDRAG) / 2 + 1;
+            return GetSystemMetrics(WM_SM_CXDRAG) / 2 + 1;
         }
 
         public static int GetYDragThreshold()
         {
-            return GetSystemMetrics(SM_CYDRAG) / 2 + 1;
+            return GetSystemMetrics(WM_SM_CYDRAG) / 2 + 1;
         }
 
         public static int GetXDoubleClickThreshold()
         {
-            return GetSystemMetrics(SM_CXDOUBLECLK) / 2 + 1;
+            return GetSystemMetrics(WM_SM_CXDOUBLECLK) / 2 + 1;
         }
 
         public static int GetYDoubleClickThreshold()
         {
-            return GetSystemMetrics(SM_CYDOUBLECLK) / 2 + 1;
+            return GetSystemMetrics(WM_SM_CYDOUBLECLK) / 2 + 1;
         }
     }
 
-    internal abstract class MouseListener : BaseListener, IMouseEvents
+    abstract internal class MouseListener : BaseListener, IMouseEvents
     {
-        private readonly ButtonSet m_DoubleDown;
-        private readonly ButtonSet m_SingleDown;
-        protected readonly Point m_UninitialisedPoint = new Point(-99999, -99999);
-        private readonly int m_SwapButtonThreshold;
-        private readonly int m_xDragThreshold;
-        private readonly int m_yDragThreshold;
-        private Point m_DragStartPosition;
+        private readonly ButtonSet _mDoubleDown;
+        private readonly ButtonSet _mSingleDown;
+        protected readonly Point MUninitialisedPoint = new Point(-99999, -99999);
+        private readonly int _mSwapButtonThreshold;
+        private readonly int _mXDragThreshold;
+        private readonly int _mYDragThreshold;
+        private Point _mDragStartPosition;
 
-        private bool m_IsDragging;
+        private bool _mIsDragging;
 
-        private Point m_PreviousPosition;
+        private Point _mPreviousPosition;
 
         protected MouseListener(Subscribe subscribe)
             : base(subscribe)
         {
-            m_SwapButtonThreshold = NativeMethods.GetSwapButtonThreshold();
-            m_xDragThreshold = NativeMethods.GetXDragThreshold();
-            m_yDragThreshold = NativeMethods.GetYDragThreshold();
-            m_IsDragging = false;
+            _mSwapButtonThreshold = NativeMethods.GetSwapButtonThreshold();
+            _mXDragThreshold = NativeMethods.GetXDragThreshold();
+            _mYDragThreshold = NativeMethods.GetYDragThreshold();
+            _mIsDragging = false;
 
-            m_PreviousPosition = m_UninitialisedPoint;
-            m_DragStartPosition = m_UninitialisedPoint;
+            _mPreviousPosition = MUninitialisedPoint;
+            _mDragStartPosition = MUninitialisedPoint;
 
-            m_DoubleDown = new ButtonSet();
-            m_SingleDown = new ButtonSet();
+            _mDoubleDown = new ButtonSet();
+            _mSingleDown = new ButtonSet();
         }
 
         public event MouseEventHandler MouseMove;
@@ -96,9 +95,9 @@ namespace Gma.System.MouseKeyHook.Implementation
         public event MouseEventHandler MouseDragFinished;
         public event EventHandler<MouseEventExtArgs> MouseDragFinishedExt;
 
-        protected override bool Callback(CallbackData data)
+        override protected bool Callback(CallbackData data)
         {
-            data.MSwapButton = m_SwapButtonThreshold;
+            data.MSwapButton = _mSwapButtonThreshold;
 
             var e = GetEventArgs(data);
 
@@ -124,21 +123,21 @@ namespace Gma.System.MouseKeyHook.Implementation
             return !e.Handled;
         }
 
-        protected abstract MouseEventExtArgs GetEventArgs(CallbackData data);
+        abstract protected MouseEventExtArgs GetEventArgs(CallbackData data);
 
-        protected virtual void ProcessWheel(ref MouseEventExtArgs e)
+        virtual protected void ProcessWheel(ref MouseEventExtArgs e)
         {
             OnWheel(e);
             OnWheelExt(e);
         }
 
-        protected virtual void ProcessHWheel(ref MouseEventExtArgs e)
+        virtual protected void ProcessHWheel(ref MouseEventExtArgs e)
         {
             OnHWheel(e);
             OnHWheelExt(e);
         }
 
-        protected virtual void ProcessDown(ref MouseEventExtArgs e)
+        virtual protected void ProcessDown(ref MouseEventExtArgs e)
         {
             OnDown(e);
             OnDownExt(e);
@@ -146,36 +145,36 @@ namespace Gma.System.MouseKeyHook.Implementation
                 return;
 
             if (e.Clicks == 2)
-                m_DoubleDown.Add(e.Button);
+                _mDoubleDown.Add(e.Button);
 
             if (e.Clicks == 1)
-                m_SingleDown.Add(e.Button);
+                _mSingleDown.Add(e.Button);
         }
 
-        protected virtual void ProcessUp(ref MouseEventExtArgs e)
+        virtual protected void ProcessUp(ref MouseEventExtArgs e)
         {
             OnUp(e);
             OnUpExt(e);
             if (e.Handled)
                 return;
 
-            if (m_SingleDown.Contains(e.Button))
+            if (_mSingleDown.Contains(e.Button))
             {
                 OnClick(e);
-                m_SingleDown.Remove(e.Button);
+                _mSingleDown.Remove(e.Button);
             }
 
-            if (m_DoubleDown.Contains(e.Button))
+            if (_mDoubleDown.Contains(e.Button))
             {
                 e = e.ToDoubleClickEventArgs();
                 OnDoubleClick(e);
-                m_DoubleDown.Remove(e.Button);
+                _mDoubleDown.Remove(e.Button);
             }
         }
 
         private void ProcessMove(ref MouseEventExtArgs e)
         {
-            m_PreviousPosition = e.Point;
+            _mPreviousPosition = e.Point;
 
             OnMove(e);
             OnMoveExt(e);
@@ -183,31 +182,31 @@ namespace Gma.System.MouseKeyHook.Implementation
 
         private void ProcessDrag(ref MouseEventExtArgs e)
         {
-            if (m_SingleDown.Contains(MouseButtons.Left))
+            if (_mSingleDown.Contains(MouseButtons.Left))
             {
-                if (m_DragStartPosition.Equals(m_UninitialisedPoint))
-                    m_DragStartPosition = e.Point;
+                if (_mDragStartPosition.Equals(MUninitialisedPoint))
+                    _mDragStartPosition = e.Point;
 
                 ProcessDragStarted(ref e);
             }
             else
             {
-                m_DragStartPosition = m_UninitialisedPoint;
+                _mDragStartPosition = MUninitialisedPoint;
                 ProcessDragFinished(ref e);
             }
         }
 
         private void ProcessDragStarted(ref MouseEventExtArgs e)
         {
-            if (!m_IsDragging)
+            if (!_mIsDragging)
             {
-                var isXDragging = Math.Abs(e.Point.X - m_DragStartPosition.X) > m_xDragThreshold;
-                var isYDragging = Math.Abs(e.Point.Y - m_DragStartPosition.Y) > m_yDragThreshold;
-                m_IsDragging = isXDragging || isYDragging;
+                var isXDragging = Math.Abs(e.Point.X - _mDragStartPosition.X) > _mXDragThreshold;
+                var isYDragging = Math.Abs(e.Point.Y - _mDragStartPosition.Y) > _mYDragThreshold;
+                _mIsDragging = isXDragging || isYDragging;
 
-                if (m_IsDragging)
+                if (_mIsDragging)
                 {
-                    var dragArgs = new MouseEventExtArgs(e.Button, e.Clicks, m_DragStartPosition, e.Delta, e.Timestamp, e.IsMouseButtonDown, e.IsMouseButtonUp, e.IsHorizontalWheel, e.IsInjected);
+                    var dragArgs = new MouseEventExtArgs(e.Button, e.Clicks, _mDragStartPosition, e.Delta, e.Timestamp, e.IsMouseButtonDown, e.IsMouseButtonUp, e.IsHorizontalWheel, e.IsInjected);
                     OnDragStarted(dragArgs);
                     OnDragStartedExt(dragArgs);
                 }
@@ -216,110 +215,110 @@ namespace Gma.System.MouseKeyHook.Implementation
 
         private void ProcessDragFinished(ref MouseEventExtArgs e)
         {
-            if (m_IsDragging)
+            if (_mIsDragging)
             {
                 OnDragFinished(e);
                 OnDragFinishedExt(e);
-                m_IsDragging = false;
+                _mIsDragging = false;
             }
         }
 
         private bool HasMoved(Point actualPoint)
         {
-            return m_PreviousPosition != actualPoint;
+            return _mPreviousPosition != actualPoint;
         }
 
-        protected virtual void OnMove(MouseEventArgs e)
+        virtual protected void OnMove(MouseEventArgs e)
         {
             var handler = MouseMove;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnMoveExt(MouseEventExtArgs e)
+        virtual protected void OnMoveExt(MouseEventExtArgs e)
         {
             var handler = MouseMoveExt;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnClick(MouseEventArgs e)
+        virtual protected void OnClick(MouseEventArgs e)
         {
             var handler = MouseClick;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnDown(MouseEventArgs e)
+        virtual protected void OnDown(MouseEventArgs e)
         {
             var handler = MouseDown;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnDownExt(MouseEventExtArgs e)
+        virtual protected void OnDownExt(MouseEventExtArgs e)
         {
             var handler = MouseDownExt;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnUp(MouseEventArgs e)
+        virtual protected void OnUp(MouseEventArgs e)
         {
             var handler = MouseUp;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnUpExt(MouseEventExtArgs e)
+        virtual protected void OnUpExt(MouseEventExtArgs e)
         {
             var handler = MouseUpExt;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnWheel(MouseEventArgs e)
+        virtual protected void OnWheel(MouseEventArgs e)
         {
             var handler = MouseWheel;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnWheelExt(MouseEventExtArgs e)
+        virtual protected void OnWheelExt(MouseEventExtArgs e)
         {
             var handler = MouseWheelExt;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnHWheel(MouseEventArgs e)
+        virtual protected void OnHWheel(MouseEventArgs e)
         {
             var handler = MouseHWheel;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnHWheelExt(MouseEventExtArgs e)
+        virtual protected void OnHWheelExt(MouseEventExtArgs e)
         {
             var handler = MouseHWheelExt;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnDoubleClick(MouseEventArgs e)
+        virtual protected void OnDoubleClick(MouseEventArgs e)
         {
             var handler = MouseDoubleClick;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnDragStarted(MouseEventArgs e)
+        virtual protected void OnDragStarted(MouseEventArgs e)
         {
             var handler = MouseDragStarted;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnDragStartedExt(MouseEventExtArgs e)
+        virtual protected void OnDragStartedExt(MouseEventExtArgs e)
         {
             var handler = MouseDragStartedExt;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnDragFinished(MouseEventArgs e)
+        virtual protected void OnDragFinished(MouseEventArgs e)
         {
             var handler = MouseDragFinished;
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnDragFinishedExt(MouseEventExtArgs e)
+        virtual protected void OnDragFinishedExt(MouseEventExtArgs e)
         {
             var handler = MouseDragFinishedExt;
             if (handler != null) handler(this, e);

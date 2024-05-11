@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace Gma.System.MouseKeyHook.WinApi
 {
-    internal static class HookNativeMethods
+    static internal class HookNativeMethods
     {
         /// <summary>
         ///     The CallNextHookEx function passes the hook information to the next hook procedure in the current hook chain.
@@ -23,7 +23,7 @@ namespace Gma.System.MouseKeyHook.WinApi
         /// </remarks>
         [DllImport("user32.dll", CharSet = CharSet.Auto,
             CallingConvention = CallingConvention.StdCall)]
-        internal static extern IntPtr CallNextHookEx(
+        static internal extern IntPtr CallNextHookEx(
             IntPtr idHook,
             int nCode,
             IntPtr wParam,
@@ -61,7 +61,7 @@ namespace Gma.System.MouseKeyHook.WinApi
         /// </remarks>
         [DllImport("user32.dll", CharSet = CharSet.Auto,
             CallingConvention = CallingConvention.StdCall, SetLastError = true)]
-        internal static extern HookProcedureHandle SetWindowsHookEx(
+        static internal extern HookProcedureHandle SetWindowsHookEx(
             int idHook,
             HookProcedure lpfn,
             IntPtr hMod,
@@ -84,6 +84,6 @@ namespace Gma.System.MouseKeyHook.WinApi
         /// </remarks>
         [DllImport("user32.dll", CharSet = CharSet.Auto,
             CallingConvention = CallingConvention.StdCall, SetLastError = true)]
-        internal static extern int UnhookWindowsHookEx(IntPtr idHook);
+        static internal extern int UnhookWindowsHookEx(IntPtr idHook);
     }
 }

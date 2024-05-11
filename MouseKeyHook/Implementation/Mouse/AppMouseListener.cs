@@ -3,8 +3,7 @@
 // See license.txt or https://mit-license.org/
 
 using Gma.System.MouseKeyHook.WinApi;
-
-namespace Gma.System.MouseKeyHook.Implementation
+namespace Gma.System.MouseKeyHook.Implementation.Mouse
 {
     internal class AppMouseListener : MouseListener
     {
@@ -13,7 +12,7 @@ namespace Gma.System.MouseKeyHook.Implementation
         {
         }
 
-        protected override MouseEventExtArgs GetEventArgs(CallbackData data)
+        override protected MouseEventExtArgs GetEventArgs(CallbackData data)
         {
             return MouseEventExtArgs.FromRawDataApp(data);
         }

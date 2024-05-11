@@ -14,17 +14,17 @@ namespace UnitTestWindows
     public class SingleKeyPressTest
     {
 
-        private Channel<KeyPressEventArgs> channel;
-        private AutoResetEvent handle;
-        private string buffer;
+        private Channel<KeyPressEventArgs> _channel;
+        private AutoResetEvent _handle;
+        private string _buffer;
 
         [SetUp]
         public void Setup()
         {
-            channel = Channel.CreateUnbounded<KeyPressEventArgs>();
+            _channel = Channel.CreateUnbounded<KeyPressEventArgs>();
             Hook.GlobalEvents().KeyPress += OnKeyPress;
-            handle = new AutoResetEvent(false);
-            buffer= string.Empty;
+            _handle = new AutoResetEvent(false);
+            _buffer= string.Empty;
         }
 
         private void OnKeyPress(object sender, KeyPressEventArgs e)
@@ -33,15 +33,15 @@ namespace UnitTestWindows
             //Assert.True(canWrite);
             System.Console.WriteLine(e.KeyChar);
             e.Handled = true;
-            buffer += e.KeyChar;
-            handle.Reset();
+            _buffer += e.KeyChar;
+            _handle.Reset();
         }
 
         [TearDown]
         public void TearDown()
         {
             Hook.GlobalEvents().KeyPress -= OnKeyPress;
-            this.channel.Writer.Complete();
+            this._channel.Writer.Complete();
         }
 
         [Test]
@@ -52,13 +52,13 @@ namespace UnitTestWindows
             // Simulate keystrokes for all regular and special keys
             foreach (var key in expected)
             {
-                handle.Set();
+                _handle.Set();
                 // Send the keystroke using SendKeys.SendWait
                 SendKeys.SendWait("{" + key + "}");
                 Application.DoEvents();
-                handle.WaitOne(100);
+                _handle.WaitOne(100);
             }
-            var actual = buffer;
+            var actual = _buffer;
             Assert.AreEqual(expected, actual);
         }
     }

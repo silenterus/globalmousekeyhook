@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Gma.System.MouseKeyHook.Implementation;
+using Gma.System.MouseKeyHook.Implementation.Keyboard;
 using Gma.System.MouseKeyHook.WinApi;
 
 namespace Gma.System.MouseKeyHook
@@ -45,7 +46,7 @@ namespace Gma.System.MouseKeyHook
         /// </summary>
         public int Timestamp { get; }
 
-        internal static IEnumerable<KeyPressEventArgsExt> FromRawDataApp(CallbackData data)
+        static internal IEnumerable<KeyPressEventArgsExt> FromRawDataApp(CallbackData data)
         {
             var wParam = data.WParam;
             var lParam = data.LParam;
@@ -78,12 +79,12 @@ namespace Gma.System.MouseKeyHook
                 yield return new KeyPressEventArgsExt(ch);
         }
 
-        internal static IEnumerable<KeyPressEventArgsExt> FromRawDataGlobal(CallbackData data)
+        static internal IEnumerable<KeyPressEventArgsExt> FromRawDataGlobal(CallbackData data)
         {
             var wParam = data.WParam;
             var lParam = data.LParam;
 
-            if ((int) wParam != Messages.WM_KEYDOWN && (int) wParam != Messages.WM_SYSKEYDOWN)
+            if ((int) wParam != Messages.Keydown && (int) wParam != Messages.Syskeydown)
                 yield break;
 
             var keyboardHookStruct =
@@ -93,7 +94,7 @@ namespace Gma.System.MouseKeyHook
             var scanCode = keyboardHookStruct.ScanCode;
             var fuState = keyboardHookStruct.Flags;
 
-            if (virtualKeyCode == KeyboardNativeMethods.VK_PACKET)
+            if (virtualKeyCode == KeyboardNativeMethods.Packet)
             {
                 var ch = (char) scanCode;
                 yield return new KeyPressEventArgsExt(ch, keyboardHookStruct.Time);

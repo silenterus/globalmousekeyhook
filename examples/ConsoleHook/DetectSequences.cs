@@ -9,7 +9,7 @@ using Gma.System.MouseKeyHook;
 
 namespace ConsoleHook
 {
-    internal class DetectSequences
+    static internal class DetectSequences
     {
         public static void Do(Action quit)
         {

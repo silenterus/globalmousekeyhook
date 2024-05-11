@@ -4,6 +4,7 @@
 
 using System.Windows.Forms;
 using Gma.System.MouseKeyHook.Implementation;
+using Gma.System.MouseKeyHook.Implementation.Keyboard;
 
 namespace MouseKeyHook.Rx
 {

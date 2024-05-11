@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Gma.System.MouseKeyHook.WinApi
 {
-    internal static class HotkeysNativeMethods
+    static internal class HotkeysNativeMethods
     {
         /// <summary>
         ///     Defines a system-wide hot key.

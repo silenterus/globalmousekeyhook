@@ -9,6 +9,7 @@ using System.Reactive.Linq;
 using System.Windows.Forms;
 using Gma.System.MouseKeyHook;
 using Gma.System.MouseKeyHook.Implementation;
+using Gma.System.MouseKeyHook.Implementation.Keyboard;
 using srx = System.Reactive.Linq;
 
 namespace MouseKeyHook.Rx

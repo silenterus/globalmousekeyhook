@@ -8,7 +8,7 @@ using Gma.System.MouseKeyHook;
 
 namespace ConsoleHook
 {
-    internal class LogKeys
+    static internal class LogKeys
     {
         public static void Do(Action  quit)
         {

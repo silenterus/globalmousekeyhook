@@ -21,7 +21,7 @@ namespace Gma.System.MouseKeyHook.WinApi
         {
         }
 
-        protected override bool ReleaseHandle()
+        override protected bool ReleaseHandle()
         {
             //NOTE Calling Unhook during processexit causes deley
             var ret = HookNativeMethods.UnhookWindowsHookEx(handle);

@@ -7,14 +7,14 @@ using System.Runtime.InteropServices;
 
 namespace Gma.System.MouseKeyHook.WinApi
 {
-    internal static class ThreadNativeMethods
+    static internal class ThreadNativeMethods
     {
         /// <summary>
         ///     Retrieves the unmanaged thread identifier of the calling thread.
         /// </summary>
         /// <returns></returns>
         [DllImport("kernel32")]
-        internal static extern int GetCurrentThreadId();
+        static internal extern int GetCurrentThreadId();
 
         /// <summary>
         ///     Retrieves a handle to the foreground window (the window with which the user is currently working).
@@ -23,7 +23,7 @@ namespace Gma.System.MouseKeyHook.WinApi
         /// </summary>
         /// <returns></returns>
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        internal static extern IntPtr GetForegroundWindow();
+        static internal extern IntPtr GetForegroundWindow();
 
         /// <summary>
         ///     Retrieves the identifier of the thread that created the specified window and, optionally, the identifier of the
@@ -37,6 +37,6 @@ namespace Gma.System.MouseKeyHook.WinApi
         /// </param>
         /// <returns>The return value is the identifier of the thread that created the window. </returns>
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern int GetWindowThreadProcessId(IntPtr handle, out int processId);
+        static internal extern int GetWindowThreadProcessId(IntPtr handle, out int processId);
     }
 }

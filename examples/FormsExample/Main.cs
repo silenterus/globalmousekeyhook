@@ -11,7 +11,7 @@ namespace Demo
 {
     public partial class Main : Form
     {
-        private IKeyboardMouseEvents m_Events;
+        private IKeyboardMouseEvents _mEvents;
 
         public Main()
         {
@@ -40,71 +40,71 @@ namespace Demo
 
         private void Subscribe(IKeyboardMouseEvents events)
         {
-            m_Events = events;
-            m_Events.KeyDown += OnKeyDown;
-            m_Events.KeyUp += OnKeyUp;
-            m_Events.KeyPress += HookManager_KeyPress;
+            _mEvents = events;
+            _mEvents.KeyDown += OnKeyDown;
+            _mEvents.KeyUp += OnKeyUp;
+            _mEvents.KeyPress += HookManager_KeyPress;
 
-            m_Events.MouseUp += OnMouseUp;
-            m_Events.MouseClick += OnMouseClick;
-            m_Events.MouseDoubleClick += OnMouseDoubleClick;
+            _mEvents.MouseUp += OnMouseUp;
+            _mEvents.MouseClick += OnMouseClick;
+            _mEvents.MouseDoubleClick += OnMouseDoubleClick;
 
-            m_Events.MouseMove += HookManager_MouseMove;
+            _mEvents.MouseMove += HookManager_MouseMove;
 
-            m_Events.MouseDragStarted += OnMouseDragStarted;
-            m_Events.MouseDragFinished += OnMouseDragFinished;
+            _mEvents.MouseDragStarted += OnMouseDragStarted;
+            _mEvents.MouseDragFinished += OnMouseDragFinished;
 
             if (checkBoxSupressMouseWheel.Checked)
             {
-                m_Events.MouseWheelExt += HookManager_MouseWheelExt;
-                m_Events.MouseHWheelExt += HookManager_MouseHWheelExt;
+                _mEvents.MouseWheelExt += HookManager_MouseWheelExt;
+                _mEvents.MouseHWheelExt += HookManager_MouseHWheelExt;
             }
             else
             {
-                m_Events.MouseWheel += HookManager_MouseWheel;
-                m_Events.MouseHWheel += HookManager_MouseHWheel;
+                _mEvents.MouseWheel += HookManager_MouseWheel;
+                _mEvents.MouseHWheel += HookManager_MouseHWheel;
             }
 
             if (checkBoxSuppressMouse.Checked)
-                m_Events.MouseDownExt += HookManager_Supress;
+                _mEvents.MouseDownExt += HookManager_Supress;
             else
-                m_Events.MouseDown += OnMouseDown;
+                _mEvents.MouseDown += OnMouseDown;
         }
 
         private void Unsubscribe()
         {
-            if (m_Events == null) return;
-            m_Events.KeyDown -= OnKeyDown;
-            m_Events.KeyUp -= OnKeyUp;
-            m_Events.KeyPress -= HookManager_KeyPress;
+            if (_mEvents == null) return;
+            _mEvents.KeyDown -= OnKeyDown;
+            _mEvents.KeyUp -= OnKeyUp;
+            _mEvents.KeyPress -= HookManager_KeyPress;
 
-            m_Events.MouseUp -= OnMouseUp;
-            m_Events.MouseClick -= OnMouseClick;
-            m_Events.MouseDoubleClick -= OnMouseDoubleClick;
+            _mEvents.MouseUp -= OnMouseUp;
+            _mEvents.MouseClick -= OnMouseClick;
+            _mEvents.MouseDoubleClick -= OnMouseDoubleClick;
 
-            m_Events.MouseMove -= HookManager_MouseMove;
+            _mEvents.MouseMove -= HookManager_MouseMove;
 
-            m_Events.MouseDragStarted -= OnMouseDragStarted;
-            m_Events.MouseDragFinished -= OnMouseDragFinished;
+            _mEvents.MouseDragStarted -= OnMouseDragStarted;
+            _mEvents.MouseDragFinished -= OnMouseDragFinished;
 
             if (checkBoxSupressMouseWheel.Checked)
             {
-                m_Events.MouseWheelExt -= HookManager_MouseWheelExt;
-                m_Events.MouseHWheelExt -= HookManager_MouseHWheelExt;
+                _mEvents.MouseWheelExt -= HookManager_MouseWheelExt;
+                _mEvents.MouseHWheelExt -= HookManager_MouseHWheelExt;
             }
             else
             {
-                m_Events.MouseWheel -= HookManager_MouseWheel;
-                m_Events.MouseHWheel -= HookManager_MouseHWheel;
+                _mEvents.MouseWheel -= HookManager_MouseWheel;
+                _mEvents.MouseHWheel -= HookManager_MouseHWheel;
             }
 
             if (checkBoxSuppressMouse.Checked)
-                m_Events.MouseDownExt -= HookManager_Supress;
+                _mEvents.MouseDownExt -= HookManager_Supress;
             else
-                m_Events.MouseDown -= OnMouseDown;
+                _mEvents.MouseDown -= OnMouseDown;
 
-            m_Events.Dispose();
-            m_Events = null;
+            _mEvents.Dispose();
+            _mEvents = null;
         }
 
         private void HookManager_Supress(object sender, MouseEventExtArgs e)
@@ -218,37 +218,37 @@ namespace Demo
 
         private void checkBoxSupressMouseWheel_CheckedChanged(object sender, EventArgs e)
         {
-            if (m_Events == null) return;
+            if (_mEvents == null) return;
 
             if (((CheckBox) sender).Checked)
             {
-                m_Events.MouseWheel -= HookManager_MouseWheel;
-                m_Events.MouseWheelExt += HookManager_MouseWheelExt;
-                m_Events.MouseHWheel -= HookManager_MouseHWheel;
-                m_Events.MouseHWheelExt += HookManager_MouseHWheelExt;
+                _mEvents.MouseWheel -= HookManager_MouseWheel;
+                _mEvents.MouseWheelExt += HookManager_MouseWheelExt;
+                _mEvents.MouseHWheel -= HookManager_MouseHWheel;
+                _mEvents.MouseHWheelExt += HookManager_MouseHWheelExt;
             }
             else
             {
-                m_Events.MouseWheelExt -= HookManager_MouseWheelExt;
-                m_Events.MouseWheel += HookManager_MouseWheel;
-                m_Events.MouseHWheelExt -= HookManager_MouseHWheelExt;
-                m_Events.MouseHWheel += HookManager_MouseHWheel;
+                _mEvents.MouseWheelExt -= HookManager_MouseWheelExt;
+                _mEvents.MouseWheel += HookManager_MouseWheel;
+                _mEvents.MouseHWheelExt -= HookManager_MouseHWheelExt;
+                _mEvents.MouseHWheel += HookManager_MouseHWheel;
             }
         }
 
         private void checkBoxSuppressMouse_CheckedChanged(object sender, EventArgs e)
         {
-            if (m_Events == null) return;
+            if (_mEvents == null) return;
 
             if (((CheckBox) sender).Checked)
             {
-                m_Events.MouseDown -= OnMouseDown;
-                m_Events.MouseDownExt += HookManager_Supress;
+                _mEvents.MouseDown -= OnMouseDown;
+                _mEvents.MouseDownExt += HookManager_Supress;
             }
             else
             {
-                m_Events.MouseDownExt -= HookManager_Supress;
-                m_Events.MouseDown += OnMouseDown;
+                _mEvents.MouseDownExt -= HookManager_Supress;
+                _mEvents.MouseDown += OnMouseDown;
             }
         }
 

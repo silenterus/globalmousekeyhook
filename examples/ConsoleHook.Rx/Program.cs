@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace ConsoleHook.Rx
 {
-    internal class Program
+    static internal class Program
     {
         private static void Main(string[] args)
         {

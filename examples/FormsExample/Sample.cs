@@ -10,15 +10,15 @@ namespace Demo
 {
     internal class Sample
     {
-        private IKeyboardMouseEvents m_GlobalHook;
+        private IKeyboardMouseEvents _mGlobalHook;
 
         public void Subscribe()
         {
             // Note: for the application hook, use the Hook.AppEvents() instead
-            m_GlobalHook = Hook.GlobalEvents();
+            _mGlobalHook = Hook.GlobalEvents();
 
-            m_GlobalHook.MouseDownExt += GlobalHookMouseDownExt;
-            m_GlobalHook.KeyPress += GlobalHookKeyPress;
+            _mGlobalHook.MouseDownExt += GlobalHookMouseDownExt;
+            _mGlobalHook.KeyPress += GlobalHookKeyPress;
         }
 
         private void GlobalHookKeyPress(object sender, KeyPressEventArgs e)
@@ -36,11 +36,11 @@ namespace Demo
 
         public void Unsubscribe()
         {
-            m_GlobalHook.MouseDownExt -= GlobalHookMouseDownExt;
-            m_GlobalHook.KeyPress -= GlobalHookKeyPress;
+            _mGlobalHook.MouseDownExt -= GlobalHookMouseDownExt;
+            _mGlobalHook.KeyPress -= GlobalHookKeyPress;
 
             //It is recommened to dispose it
-            m_GlobalHook.Dispose();
+            _mGlobalHook.Dispose();
         }
     }
 }

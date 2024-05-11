@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace ConsoleHook.Rx
 {
-    internal class DetectSequences
+    static internal class DetectSequences
     {
         public static void Do(AutoResetEvent quit)
         {

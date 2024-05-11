@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Gma.System.MouseKeyHook.Implementation.Keyboard;
 
 namespace Gma.System.MouseKeyHook.Implementation
 {

@@ -7,10 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Gma.System.MouseKeyHook.WinApi;
-
-namespace Gma.System.MouseKeyHook.Implementation
+namespace Gma.System.MouseKeyHook.Implementation.Keyboard
 {
-    internal abstract class KeyListener : BaseListener, IKeyboardEvents
+    abstract internal class KeyListener : BaseListener, IKeyboardEvents
     {
         protected KeyListener(Subscribe subscribe)
             : base(subscribe)
@@ -84,7 +83,7 @@ namespace Gma.System.MouseKeyHook.Implementation
             handler(this, e);
         }
 
-        protected override bool Callback(CallbackData data)
+        override protected bool Callback(CallbackData data)
         {
             var eDownUp = GetDownUpEventArgs(data);
 
@@ -113,7 +112,7 @@ namespace Gma.System.MouseKeyHook.Implementation
             return new KeyDownTxtEventArgs(eDownUp, chars);
         }
 
-        protected abstract IEnumerable<KeyPressEventArgsExt> GetPressEventArgs(CallbackData data);
-        protected abstract KeyEventArgsExt GetDownUpEventArgs(CallbackData data);
+        abstract protected IEnumerable<KeyPressEventArgsExt> GetPressEventArgs(CallbackData data);
+        abstract protected KeyEventArgsExt GetDownUpEventArgs(CallbackData data);
     }
 }

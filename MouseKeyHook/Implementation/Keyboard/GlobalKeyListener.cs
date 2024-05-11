@@ -4,8 +4,7 @@
 
 using System.Collections.Generic;
 using Gma.System.MouseKeyHook.WinApi;
-
-namespace Gma.System.MouseKeyHook.Implementation
+namespace Gma.System.MouseKeyHook.Implementation.Keyboard
 {
     internal class GlobalKeyListener : KeyListener
     {
@@ -14,12 +13,12 @@ namespace Gma.System.MouseKeyHook.Implementation
         {
         }
 
-        protected override IEnumerable<KeyPressEventArgsExt> GetPressEventArgs(CallbackData data)
+        override protected IEnumerable<KeyPressEventArgsExt> GetPressEventArgs(CallbackData data)
         {
             return KeyPressEventArgsExt.FromRawDataGlobal(data);
         }
 
-        protected override KeyEventArgsExt GetDownUpEventArgs(CallbackData data)
+        override protected KeyEventArgsExt GetDownUpEventArgs(CallbackData data)
         {
             return KeyEventArgsExt.FromRawDataGlobal(data);
         }

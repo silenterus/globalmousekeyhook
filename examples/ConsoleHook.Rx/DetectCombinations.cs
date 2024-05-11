@@ -11,7 +11,7 @@ using MouseKeyHook.Rx;
 
 namespace ConsoleHook.Rx
 {
-    internal class DetectCombinations
+    static internal class DetectCombinations
     {
         public static void Do(AutoResetEvent quit)
         {

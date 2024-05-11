@@ -10,7 +10,7 @@ using Gma.System.MouseKeyHook;
 
 namespace ConsoleHook
 {
-    internal class DetectCombinations
+    static internal class DetectCombinations
     {
         public static void Do(Action quit)
         {
